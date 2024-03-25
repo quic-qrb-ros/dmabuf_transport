@@ -12,52 +12,68 @@ if(NOT CMAKE_CXX_STANDARD)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_options(-Wall -Wextra -Wpedantic -std=c++17)
 endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # find dependencies
-find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(rclcpp_components REQUIRED)
-find_package(sensor_msgs REQUIRED)
+find_package(ament_cmake_auto REQUIRED)
+ament_auto_find_build_dependencies()
 
-include_directories(include)
-
-add_library(${PROJECT_NAME} SHARED
-  src/dmabuf.cpp
+ament_auto_add_library(${PROJECT_NAME} SHARED
+  src/type/image.cpp
+  src/type/point_cloud2.cpp
 )
-
-ament_target_dependencies(${PROJECT_NAME}
-  rclcpp
-  sensor_msgs
-)
-
-install(
-  TARGETS ${PROJECT_NAME}
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-  RUNTIME DESTINATION bin
-)
-
-install(DIRECTORY
-  include/
-  DESTINATION include
-)
-
-ament_export_include_directories(include)
 
 if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # comment the line when a copyright and license is added to all source files
-  set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # comment the line when this package is in a git repo and when
-  # a copyright and license is added to all source files
-  set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
+  find_package(ament_cmake_gtest REQUIRED)
+
+  ament_auto_add_gtest(${PROJECT_NAME}_image_test_pub
+    test/image_test.cpp
+  )
+  target_compile_definitions(${PROJECT_NAME}_image_test_pub PRIVATE "-DTEST_PUBLISHER")
+
+  ament_auto_add_gtest(${PROJECT_NAME}_image_test_sub
+    test/image_test.cpp
+  )
+  target_compile_definitions(${PROJECT_NAME}_image_test_sub PRIVATE "-DTEST_SUBSCRIBER")
+
+  ament_auto_add_gtest(${PROJECT_NAME}_point_cloud2_test_pub
+    test/point_cloud2_test.cpp
+  )
+  target_compile_definitions(${PROJECT_NAME}_point_cloud2_test_pub PRIVATE "-DTEST_PUBLISHER")
+
+  ament_auto_add_gtest(${PROJECT_NAME}_point_cloud2_test_sub
+    test/point_cloud2_test.cpp
+  )
+  target_compile_definitions(${PROJECT_NAME}_point_cloud2_test_sub PRIVATE "-DTEST_SUBSCRIBER")
+
+  # for end-to-end test
+  find_package(rclcpp_components REQUIRED)
+  find_package(pcl_conversions REQUIRED)
+  find_package(PCL REQUIRED)
+  macro(add_test_component component_name class_name)
+    ament_auto_add_library(${PROJECT_NAME}_${component_name}_component SHARED
+      test/${component_name}.cpp
+    )
+    ament_target_dependencies(${PROJECT_NAME}_${component_name}_component
+      rclcpp_components
+      pcl_conversions
+    )
+    target_include_directories(${PROJECT_NAME}_${component_name}_component PUBLIC
+      ${PCL_INCLUDE_DIRS}
+    )
+    target_link_libraries(${PROJECT_NAME}_${component_name}_component
+      ${PCL_LIBRARIES}
+    )
+    rclcpp_components_register_nodes(${PROJECT_NAME}_${component_name}_component ${class_name})
+  endmacro(add_test_component)
+
+  add_test_component(test_pub "dmabuf_transport::TestPubComponent")
+  add_test_component(test_sub "dmabuf_transport::TestSubComponent")
+  add_test_component(test_dump "dmabuf_transport::TestDumpComponent")
+
 endif()
 
-ament_package()
+ament_auto_package()

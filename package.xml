@@ -2,19 +2,24 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>dmabuf_transport</name>
-  <version>1.0.0</version>
-  <description>Linux DMA Buf Type Adaption</description>
+  <version>1.1.0</version>
+  <description>Type Adaption with Linux dma-buf</description>
   <maintainer email="quic_penwang@quicinc.com">Peng Wang</maintainer>
   <license>BSD-3-Clause-Clear</license>
 
-  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_auto</buildtool_depend>
 
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
   <depend>sensor_msgs</depend>
+  <depend>lib_mem_dmabuf</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>rclcpp_components</test_depend>
+  <test_depend>pcl</test_depend>
+  <test_depend>pcl_conversions</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
