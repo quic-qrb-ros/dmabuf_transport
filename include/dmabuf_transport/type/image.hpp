@@ -43,7 +43,6 @@ struct rclcpp::TypeAdapter<dmabuf_transport::type::Image, sensor_msgs::msg::Imag
     destination.is_bigendian = source.is_bigendian;
     destination.step = source.step;
 
-
     if (source.dmabuf == nullptr || source.dmabuf->fd() <= 0) {
       RCLCPP_ERROR(rclcpp::get_logger("dmabuf_transport"), "image: dmabuf is null");
       return;
