@@ -1,0 +1,56 @@
+name: Build Yocto
+
+on:
+  - pull_request
+
+env:
+  PERSIST_DIR: /srv/gh-runners/quic-qrb-ros
+  DL_DIR: /srv/gh-runners/quic-qrb-ros/downloads
+  WORKSPACE: ${{ github.workspace }}/ros_ws
+  SDK_DIR: ${{ github.workspace }}/sdk
+
+  BASE_ARTIFACT_URL: "https://quic-qrt-ros-fileserver-1029608027416.us-central1.run.app/${{ github.run_id }}"
+
+jobs:
+  andy:
+    runs-on: [self-hosted, x86]
+    steps:
+      - name: Kas build
+        run: |
+          set -ex
+          build_dir=${PERSIST_DIR}/builds/${GITHUB_RUN_ID}
+          mkdir -p $build_dir
+          dd if=/dev/urandom of=${build_dir}/sample1.txt bs=100M count=1 iflag=fullblock
+          dd if=/dev/urandom of=${build_dir}/sample2.txt bs=100M count=1 iflag=fullblock
+
+      - name: Publish image
+        run: |
+          build_dir=${PERSIST_DIR}/builds/${GITHUB_RUN_ID}
+
+          # Instruct our file server to make these files available for download
+          url="${BASE_ARTIFACT_URL}/"
+
+          retries=8
+          okay=0
+          shopt -s lastpipe  # allows us to capture the value of `okay` in the while loop below
+          for ((i=0; i<retries; i++)); do
+              curl -X POST -H "Accept: text/event-stream" -i --fail-with-body -s -N ${url} | \
+                  while read line; do
+                      echo $line
+                      if [[ $line == STATUS=* ]]; then
+                          if [[ $line == "STATUS=OK" ]]; then
+                              okay=1
+                              break
+                          fi
+                      fi
+                  done
+              [ $okay -eq 1 ] && break
+              echo # new line break in case response doesn't have one
+              echo "Error: unable to publish artifacts, sleep and retry"
+              sleep 2
+          done
+          (( retries == i )) && { echo 'Failed to publish artifacts'; exit 1; }
+
+          echo # new line break in case response doesn't have one
+          echo Image available at: ${url}
+
