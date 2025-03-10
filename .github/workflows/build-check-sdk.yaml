@@ -83,7 +83,7 @@ jobs:
           shopt -s lastpipe  # allows us to capture the value of `okay` in the while loop below
           for ((i=0; i<retries; i++)); do
               curl -X POST -H "Accept: text/event-stream" -i --fail-with-body -s -N ${url} | \
-                  while read line; do
+                  while read -r line; do
                       echo $line
                       if [[ $line == STATUS=* ]]; then
                           if [[ $line == "STATUS=OK" ]]; then
