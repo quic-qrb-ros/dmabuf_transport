@@ -4,7 +4,7 @@ dmabuf_transport is a package for zero-copy transport ROS message with Linux dma
 
 ## Overview
 
-[Dmabuf Transport](https://github.com/quic-qrb-ros/dmabuf_transport) provides a way to share data between different hardware accelerators and different ROS nodes with zero-copy.
+[Dmabuf Transport](https://github.com/qualcomm-qrb-ros/dmabuf_transport) provides a way to share data between different hardware accelerators and different ROS nodes with zero-copy.
 
 It is built on ROS 2 [Type Adaption](https://ros.org/reps/rep-2007.html). It allows us to define methods for serializing directly to the user requested type, and/or using that type in intra-process communication without ever converting it.
 
@@ -14,10 +14,10 @@ We can define our adapted types with Linux dma-buf, and send dma-buf descriptor 
 
 ## Documentation
 
-Please refer to the [Dmabuf Transport](https://quic-qrb-ros.github.io/main/packages/qrb_ros_transport/dmabuf_transport.html) for more documents.
-- [Overview](https://quic-qrb-ros.github.io/main/packages/qrb_ros_transport/dmabuf_transport.html#overview)
-- [Quickstart](https://quic-qrb-ros.github.io/main/packages/qrb_ros_transport/dmabuf_transport.html#quickstart)
-- [Updates](https://quic-qrb-ros.github.io/main/packages/qrb_ros_transport/dmabuf_transport.html#updates)
+Please refer to the [Dmabuf Transport](https://qualcomm-qrb-ros.github.io/main/packages/qrb_ros_transport/dmabuf_transport.html) for more documents.
+- [Overview](https://qualcomm-qrb-ros.github.io/main/packages/qrb_ros_transport/dmabuf_transport.html#overview)
+- [Quickstart](https://qualcomm-qrb-ros.github.io/main/packages/qrb_ros_transport/dmabuf_transport.html#quickstart)
+- [Updates](https://qualcomm-qrb-ros.github.io/main/packages/qrb_ros_transport/dmabuf_transport.html#updates)
 
 ## Contributing
 
@@ -30,7 +30,7 @@ We would love to have you as a part of the QRB ROS community. Whether you are he
 
 * **Peng Wang** - *Initial work* - [penww](https://github.com/penww)
 
-See also the list of [contributors](https://github.com/quic-qrb-ros/dmabuf_transport/graphs/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/qualcomm-qrb-ros/dmabuf_transport/graphs/contributors) who participated in this project.
 
 
 ## License
