@@ -1,0 +1,12 @@
+Source: ros-jazzy-dmabuf-transport
+Section: misc
+Priority: optional
+Maintainer: Peng Wang <penwang@qti.qualcomm.com>
+Build-Depends: debhelper-compat (= 13), ros-jazzy-ament-cmake-auto, ros-jazzy-ament-cmake-gtest <!nocheck>, ros-jazzy-ament-lint-auto <!nocheck>, ros-jazzy-ament-lint-common <!nocheck>, ros-jazzy-lib-mem-dmabuf, ros-jazzy-rclcpp, ros-jazzy-sensor-msgs
+Homepage: https://github.com/qualcomm-qrb-ros/dmabuf_transport
+Standards-Version: 3.9.2
+
+Package: ros-jazzy-dmabuf-transport
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-jazzy-lib-mem-dmabuf, ros-jazzy-rclcpp, ros-jazzy-sensor-msgs
+Description: Type Adaption with Linux dma-buf

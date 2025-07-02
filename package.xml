@@ -6,6 +6,7 @@
   <description>Type Adaption with Linux dma-buf</description>
   <maintainer email="penwang@qti.qualcomm.com">Peng Wang</maintainer>
   <license>BSD-3-Clause-Clear</license>
+  <url>https://github.com/qualcomm-qrb-ros/dmabuf_transport</url>
 
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
 
