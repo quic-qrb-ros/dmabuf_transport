@@ -49,31 +49,6 @@ if(BUILD_TESTING)
   )
   target_compile_definitions(${PROJECT_NAME}_point_cloud2_test_sub PRIVATE "-DTEST_SUBSCRIBER")
 
-  # for end-to-end test
-  find_package(rclcpp_components REQUIRED)
-  find_package(pcl_conversions REQUIRED)
-  find_package(PCL REQUIRED)
-  macro(add_test_component component_name class_name)
-    ament_auto_add_library(${PROJECT_NAME}_${component_name}_component SHARED
-      test/${component_name}.cpp
-    )
-    ament_target_dependencies(${PROJECT_NAME}_${component_name}_component
-      rclcpp_components
-      pcl_conversions
-    )
-    target_include_directories(${PROJECT_NAME}_${component_name}_component PUBLIC
-      ${PCL_INCLUDE_DIRS}
-    )
-    target_link_libraries(${PROJECT_NAME}_${component_name}_component
-      ${PCL_LIBRARIES}
-    )
-    rclcpp_components_register_nodes(${PROJECT_NAME}_${component_name}_component ${class_name})
-  endmacro(add_test_component)
-
-  add_test_component(test_pub "dmabuf_transport::TestPubComponent")
-  add_test_component(test_sub "dmabuf_transport::TestSubComponent")
-  add_test_component(test_dump "dmabuf_transport::TestDumpComponent")
-
 endif()
 
 ament_auto_package()
